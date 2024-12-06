@@ -16,7 +16,7 @@ export default function Chapter3() {
         are important patterns to follow for loading states and error handling.
       </p>
       <h2>✋ Basic Data Fetching</h2>
-      
+
       <a href="https://jsonplaceholder.typicode.com/" className="text-sky-500">
         data source: jsonplaceholder.typicode.com
       </a>
@@ -114,6 +114,82 @@ export default function Chapter3() {
           </div>
         </div>
       </LiveProvider>
+
+      <p>
+        Here&apos;s an alternate approach using async/await to load other
+        elements while fetching data.
+      </p>
+
+      <LiveProvider
+        code={`function AsyncLoading() {
+  const [data, setData] = useState(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    setTimeout(() => {
+      async function fetchData() {
+        try {
+        const res = await fetch('https://jsonplaceholder.typicode.com/users/1')
+        const json = await res.json()
+        setData(json)
+      } catch (error) {
+        console.error('Failed to fetch:', error)
+      } finally {
+        setLoading(false)
+        }
+      }
+
+      fetchData()
+    }, 4000)
+  }, [])
+
+
+  return (
+    <div className="space-y-2">
+      {/* dynamic card */}
+      {loading ? (
+      <Card>
+        <CardContent className="pt-6">
+          <div className="space-y-3">
+            <div className="h-4 w-[250px] animate-pulse rounded bg-muted" />
+            <div className="h-4 w-[200px] animate-pulse rounded bg-muted" />
+          </div>
+          </CardContent>
+        </Card>
+      ) : (
+        <Card>
+          <CardContent className="pt-3">
+            <h3 className="font-bold">{data?.name}</h3>
+            <p className="text-muted-foreground">{data?.email}</p>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* static cards */}
+      {[...Array(4)].map((_, index) => (
+        <Card key={index}>
+          <CardContent className="pt-3">
+          <h3 className="font-bold">static name</h3>
+         <p className="text-muted-foreground">static email</p>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  )
+}`}
+        scope={{ useState, useEffect, Card, CardContent }}
+      >
+        <div className="-mx-24 my-8 grid grid-cols-2 gap-4 overflow-hidden rounded-lg border bg-card">
+          <div className="col-span-1 overflow-x-auto">
+            <LiveEditor />
+            <LiveError />
+          </div>
+          <div className="p-4">
+            <LivePreview />
+          </div>
+        </div>
+      </LiveProvider>
+
       <h2>😡 Error States</h2>
       <p>
         Always handle potential errors and show them to the user in a clear way.
