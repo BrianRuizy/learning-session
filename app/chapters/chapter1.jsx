@@ -118,7 +118,8 @@ function Counter() {
       <p>
         While Django stores state on the server (in sessions, databases), React
         manages state in the browser memory, allowing for instant updates
-        without server roundtrips.
+        without server roundtrips. In the React paradigm, state is local to it&apos;s
+        component.
       </p>
 
       <h2>What are Hooks?</h2>

@@ -130,7 +130,7 @@ function PropertyList() {
         <li>Consider performance with frequent updates</li>
         <li>When to use a 3rd party manager like Redux?</li>
         {/* third part libraries like Redux, Zustand, etc  inlcude lots of other built in functionality  
-            to manage state, like undo/redo, state persistence, etc that's not already baked in with React
+            to manage state, like undo/redo, state persistence, etc that's not already baked in with React, and they can help with performance issues.
         */}
       </ul>
     </div>
