@@ -1,6 +1,14 @@
 import { LiveProvider, LiveEditor, LiveError, LivePreview } from "react-live";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 export default function Chapter1() {
   return (
@@ -8,97 +16,249 @@ export default function Chapter1() {
       <p className="font-mono text-muted-foreground">Chapter 1</p>
       <h1>Intro to State and Hooks</h1>
       <p className="lead">
-        State and hooks are fundamental to React. They enable dynamic,
-        interactive applications without full page refreshes. Unlike traditional
-        server-rendered frameworks, React components can update instantly in
-        response to user actions, creating a more fluid user experience.
+        State and hooks are fundamental building blocks in React. They enable
+        components to remember and update data, forming the foundation of
+        interactive user interfaces.
       </p>
+
+      <p>
+        Before we dive into state and hooks, let&apos;s refresh our memory on
+        how different frameworks handle rendering and data updates. Coming from
+        Django, this will help us understand why React manages state differently.
+      </p>
+      <div className="overflow-hidden rounded-lg border">
+        <Table className="my-2">
+          <TableHeader>
+            <TableRow>
+              <TableHead>Tech</TableHead>
+              <TableHead>Rendering</TableHead>
+              <TableHead>Data Updates</TableHead>
+              <TableCell>Interactivity</TableCell>
+              <TableHead>State Management</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow>
+              <TableCell className="font-bold">Django Templates</TableCell>
+              <TableCell>Server-side (SSR)</TableCell>
+              <TableCell>Full page reload</TableCell>
+              <TableCell>❌</TableCell>
+              <TableCell>Server context/sessions</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell className="font-bold">React JS</TableCell>
+              <TableCell>Client-side (CSR)</TableCell>
+              <TableCell>Instant in browser</TableCell>
+              <TableCell>✅</TableCell>
+              <TableCell>Component memory</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell className="font-bold">Next.js</TableCell>
+              <TableCell>Hybrid (SSR & CSR)</TableCell>
+              <TableCell>Instant</TableCell>
+              <TableCell>✅</TableCell>
+              <TableCell>Server + Client state</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </div>
+
+      {/* <p>
+        So, Django templates (the server-side rendering) builds the entire page
+        on the server and sends it to the client, this can lead to very fast
+        initial loads but limits interactivity, because it r&quot;ires full page
+        reload for data updates.
+      </p>
+
+      <p>
+        Then React js (which uses client-side rendering) runs all the code on
+        the client does give you interactivity, and and allows instant updates
+        in the browser, but can be slow initial load due to the amount of code that
+        needs to be downloaded.
+      </p>
+
+      <p>
+        But Next.js allows for a hybrid approach: it delivers server-rendered
+        HTML for fast initial loads on static elements, (such as the layout and
+        navigation) then enables client side rendering using{" "}
+        <code className="font-mono">use client;</code> directives where dynamic
+        data or interactivity is needed. needed.
+      </p> */}
 
       <h2>What is State?</h2>
       <p>
-        State represents data that changes over time in your React components.
-        Think of it as your component&apos;s memory. Unlike traditional
-        server-rendered frameworks like Django, React components can update
-        instantly in response to user actions, creating a more fluid user
-        experience.
+        State is data that changes over time in your application, but unlike
+        Django where data changes trigger a page reload, React updates happen
+        instantly in the browser.
       </p>
-      <p>That just sounds like a variable? 🤔</p>
-      {/* <p>
-        While both states and variables are used to store data, React states are
-        specifically designed to work within the React component lifecycle and
-        provide reactivity
-        
-        With a variable, when you update it, it doesn't
-        automatically trigger a re-render, you have to manually show that
-        change.
-      </p> */}
+
       <LiveProvider
-        code={`import { useState } from "react";
+        code={`// Django way (simplified):
+def view(request):
+    count = request.session['count']
+    return render(request, 'template.html', {'count': count})
 
-const [count] = useState(0) `}
-        scope={{ useState }}
-      >
-        {/* //declaring a state variable with initial value of 0 */}
-        <LiveEditor />
-      </LiveProvider>
-
-      <ul>
-        {/* you can think of state as the component&apos;s memory */}
-        <li>Component&apos;s memory</li>
-
-        {/* changes to to the state triggers a rerender that's immmedialy visible */}
-        <li>Changes trigger re-renders</li>
-
-        {/* state is local to the component */}
-        <li>Local to components</li>
-
-        {/* state persists between renders, meaning it's not lost when the component unmounts */}
-        <li>Persists between renders</li>
-      </ul>
-
-      <h2>😦 What about Hooks?</h2>
-      <p>
-        In React, hooks are special functions that allow you to use state and
-        other React features in functional components. They were introduced in
-        React 16.8 to enable developers to manage state and side effects in a
-        more intuitive and reusable way, without the need for class components.
-      </p>
-
-      <p>
-        Only call hooks at the top level of your component, before any early
-        returns
-      </p>
-      <LiveProvider
-        code={`function MyComponent() {
-
-  // here is where you can call hooks
-  useEffect(() => {
-    // ...
-  }, [])
-
-  return <div>My Component</div>;
+# React way:
+function Counter() {
+  const [count, setCount] = useState(0)
+  
+  return (
+    <button onClick={() => setCount(count + 1)}>
+      Count: {count}
+    </button>
+  )
 }`}
-        scope={{}}
       >
-        <LiveEditor />
+        <div className="-mx-24 my-8 grid grid-cols-1 gap-4 overflow-hidden rounded-lg border bg-card">
+          <LiveEditor />
+        </div>
       </LiveProvider>
 
-      <h3>Basic built-in hooks</h3>
-      <ul>
-        <li>useState</li>
-        <li>useEffect</li>
-      </ul>
-
-      <hr className="border-dashed" />
-
-      <h2>
-        The <code>useState</code> Hook
-      </h2>
       <p>
-        useState is a built-in hook which is declared like a tuple. The first
-        element is the current state value, and the second element is a function
-        that lets you update the state.
+        While Django stores state on the server (in sessions, databases), React
+        manages state in the browser memory, allowing for instant updates
+        without server roundtrips.
       </p>
+
+      <h2>What are Hooks?</h2>
+      <p>
+        Hooks are React&apos;s built-in functions that let you add different
+        features to your components. useState is just one type of hook - it&apos;s
+        the hook specifically designed for handling state.
+      </p>
+
+      <LiveProvider
+        code={`// Django template needs server data
+{% if user.is_authenticated %}
+  <h1>Welcome {{ user.name }}</h1>
+{% endif %}
+
+// React manages data with hooks
+function Welcome() {
+  const [user, setUser] = useState(null)
+  
+  useEffect(() => {
+    // Fetch user data
+  }, []);
+}`}
+      >
+        <div className="-mx-24 my-8 grid grid-cols-1 gap-4 overflow-hidden rounded-lg border bg-card">
+          <LiveEditor />
+        </div>
+      </LiveProvider>
+
+      <h2>How Hooks Work</h2>
+      <p>
+        Behind the scenes, React keeps track of your hooks using a simple array.
+        Each time you call a hook, React stores its data in this array and
+        remembers its position.
+      </p>
+
+      <LiveProvider
+        code={`// Inside React (simplified):
+let hooks = []           // Array to store hook data
+let currentHookIndex = 0 // Position of current hook
+
+// First render:
+function NameDisplay() {
+  // First useState call
+  const [name] = useState("John")   // hooks[0] = "John"
+  
+  // Second useState call
+  const [age] = useState(25)        // hooks[1] = 25
+  
+  return <div>{name} is {age}</div>
+}
+
+// Next render:
+function NameDisplay() {
+  // React remembers values by their position
+  const [name] = useState()         // hooks[0] is still "John"
+  const [age] = useState()          // hooks[1] is still 25
+  
+  return <div>{name} is {age}</div>
+}`}
+      >
+        <div className="-mx-24 my-8 grid grid-cols-1 gap-4 overflow-hidden rounded-lg border bg-card">
+          <LiveEditor />
+        </div>
+      </LiveProvider>
+
+      <p>
+        This is why hook order matters. If hooks are called in a different
+        order, React will mix up which data belongs to which hook:
+      </p>
+
+      <LiveProvider
+        code={`// ❌ This breaks because hook order changes:
+function NameDisplay() {
+  const [name] = useState("John")   // hooks[0]
+  
+  if (someCondition) {
+    // This hook sometimes exists, sometimes doesn't!
+    const [title] = useState("Dr.") // hooks[1]?
+  }
+  
+  const [age] = useState(25)        // hooks[1] or hooks[2]?
+  // React gets confused: Is age stored at hooks[1] or hooks[2]?
+}
+
+// ✅ Keep hooks at the top level:
+function NameDisplay() {
+  const [name] = useState("John")   // Always hooks[0]
+  const [title] = useState("Dr.")   // Always hooks[1]
+  const [age] = useState(25)        // Always hooks[2]
+  
+  // Use values in conditions instead:
+  if (someCondition) {
+    name = title + " " + name
+  }
+}`}
+      >
+        <div className="-mx-24 my-8 grid grid-cols-1 gap-4 overflow-hidden rounded-lg border bg-card">
+          <LiveEditor />
+        </div>
+      </LiveProvider>
+
+      <p>
+        React uses the hook&apos;s position to know which state belongs to which
+        hook. If the order changes, React might give state from one hook to
+        another.
+      </p>
+
+      <LiveProvider
+        code={`// ❌ Don't do this - hooks after return
+function Component() {
+  if (someCondition) {
+    return <Loading />
+    const [data] = useState() // Never reached!
+  }
+}
+
+// ✅ Do this - hooks at the top
+function Component() {
+  const [data] = useState()  // Always runs
+  
+  if (someCondition) {
+    return <Loading />
+  }
+  
+  return <div>{data}</div>
+}`}
+      >
+        <div className="-mx-24 my-8 grid grid-cols-1 gap-4 overflow-hidden rounded-lg border bg-card">
+          <LiveEditor />
+        </div>
+      </LiveProvider>
+
+      <h2>Using Basic Hooks</h2>
+      <h3>useState</h3>
+      <p>
+        The useState hook lets you add state to your component. It returns an
+        array with two items: the current state value and a function to update
+        it.
+      </p>
+
       <LiveProvider
         code={`function Counter() {
   const [count, setCount] = useState(0);
@@ -126,21 +286,11 @@ const [count] = useState(0) `}
         </div>
       </LiveProvider>
 
-      <h2>
-        The <code>useEffect</code> Hook
-      </h2>
+      <h3>useEffect</h3>
       <p>
         useEffect lets you synchronize your component with external systems and
         handle side effects like API calls, subscriptions, and DOM mutations.
       </p>
-      <ul>
-        <li>Handles side effects</li>
-        {/* meaning anything that affects something outside of the component */}
-
-        <li>Runs after render</li>
-
-        <li>Cleanup on unmount</li>
-      </ul>
 
       <LiveProvider
         code={`function Timer() {
@@ -155,9 +305,8 @@ const [count] = useState(0) `}
   }, []);
 
   return (
-    <div >
-      <p>Seconds elapsed</p>
-      <p className="font-bold text-2xl">{seconds}</p>
+    <div>
+      <p>Seconds elapsed: {seconds}</p>
     </div>
   );
 }`}
@@ -174,35 +323,22 @@ const [count] = useState(0) `}
         </div>
       </LiveProvider>
 
-      <h3>Additional built-in React hooks</h3>
-      <ul>
-        <li>useContext</li>
-        <li>useReducer</li>
-        <li>useCallback</li>
-        <li>useMemo</li>
-        <li>useRef</li>
-      </ul>
-      {/*  and notice the naming convention of hooks is prefixed with use */}
-
-      <hr className="border-dashed" />
-
       <h2>🚨 Challenge (10 minutes)</h2>
+      <p>Let&apos;s practice using both useState and useEffect together:</p>
 
       <ol>
         <li className="font-bold">
           Add a reset button that sets the count back to 0
         </li>
         <li className="font-bold">
-          add useEffect to track the highest number reached externally, in this
-          case, to local storage.
+          Add useEffect to track the highest number reached in localStorage
         </li>
       </ol>
 
       <p>
-        Hint: localstorage is set with a key and value{" "}
-        <code>localStorage.setItem(&apos;key&apos;, &apos;value&apos;)</code>.
-        Head over to your browser devtools to inspect application storage for
-        changes.
+        Hint: Use <code>localStorage.setItem(&quot;key&quot;, &quot;value&quot;)</code> to save
+        data. Check your browser&apos;s devtools Application tab to see the stored
+        values.
       </p>
 
       <LiveProvider
@@ -210,7 +346,7 @@ const [count] = useState(0) `}
   const [count, setCount] = useState(0);
 
   useEffect(() => {
-    // write logic here to save the highest number reached to local storage
+    // Add logic here to save highest count
   }, [count]);
 
   return (
@@ -223,7 +359,7 @@ const [count] = useState(0) `}
       </Button>
       <Button 
         variant="destructive"
-        // write logic here to reset the count to 0
+        // Add reset logic here
       >
         Reset
       </Button>
