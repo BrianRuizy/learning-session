@@ -24,7 +24,8 @@ export default function Chapter1() {
       <p>
         Before we dive into state and hooks, let&apos;s refresh our memory on
         how different frameworks handle rendering and data updates. Coming from
-        Django, this will help us understand why React manages state differently.
+        Django, this will help us understand why React manages state
+        differently.
       </p>
       <div className="overflow-hidden rounded-lg border">
         <Table className="my-2">
@@ -123,8 +124,8 @@ function Counter() {
       <h2>What are Hooks?</h2>
       <p>
         Hooks are React&apos;s built-in functions that let you add different
-        features to your components. useState is just one type of hook - it&apos;s
-        the hook specifically designed for handling state.
+        features to your components. useState is just one type of hook -
+        it&apos;s the hook specifically designed for handling state.
       </p>
 
       <LiveProvider
@@ -255,17 +256,23 @@ function Component() {
       <h3>useState</h3>
       <p>
         The useState hook lets you add state to your component. It returns an
-        array with two items: the current state value and a function to update
-        it.
+        array with two items: the current state value (which we init to 0), and
+        a function to update it.
       </p>
-
+      <p>
+        It&apos;s a convention to use a descriptive name for the state variable,
+        and then &quot;set&quot; + name for the function to update it.
+      </p>
       <LiveProvider
         code={`function Counter() {
   const [count, setCount] = useState(0);
-
+  
   return (
     <div>
-      <p>Count: {count}</p>
+      <p>type <code>count</code>: {typeof count}</p>
+      <p>type <code>setCount</code>: {typeof setCount}</p>
+      <hr />
+      <h2>{count}</h2>
       <Button 
         onClick={() => setCount(count + 1)}
       >
@@ -306,7 +313,8 @@ function Component() {
 
   return (
     <div>
-      <p>Seconds elapsed: {seconds}</p>
+      <h2>{seconds}</h2>
+      <p>Seconds elapsed</p>
     </div>
   );
 }`}
@@ -336,9 +344,10 @@ function Component() {
       </ol>
 
       <p>
-        Hint: Use <code>localStorage.setItem(&quot;key&quot;, &quot;value&quot;)</code> to save
-        data. Check your browser&apos;s devtools Application tab to see the stored
-        values.
+        Hint: Use{" "}
+        <code>localStorage.setItem(&quot;key&quot;, &quot;value&quot;)</code> to
+        save data. Check your browser&apos;s devtools Application tab to see the
+        stored values.
       </p>
 
       <LiveProvider
@@ -351,7 +360,7 @@ function Component() {
 
   return (
     <div className="flex flex-col gap-1">
-      <p>Count: {count}</p>
+      <h2>{count}</h2>
       <Button 
         onClick={() => setCount(count + 1)}
       >
